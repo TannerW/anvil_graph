@@ -26,17 +26,15 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
 
-export const CyContext = React.createContext();  //exporting context object
 
 function Home(props) {
     const { window } = props;
 
-    let [cy, setState] = React.useState(null);
 
     return (
         <>
-        <Graph parentCallback = {setState}/>
-        <Menu myCyRef = {cy}/>
+        <Graph/>
+        {/* <Menu myCyRef = {cy}/> */}
         </>
     );
 

@@ -24,6 +24,27 @@
 
 // export default App;
 
+import PropTypes from 'prop-types';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MailIcon from '@mui/icons-material/Mail';
+import MenuIcon from '@mui/icons-material/Menu';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import './index.css';
+
 import React, { useState } from "react";
 import cytoscape from 'cytoscape';
 import cxtmenu from 'cytoscape-cxtmenu';
@@ -35,19 +56,21 @@ import cyCanvas from "cytoscape-canvas";
 // import elk from 'cytoscape-elk';
 import dagre from 'cytoscape-dagre';
 
-cytoscape.use( dagre );
+cytoscape.use(dagre);
 
 // cytoscape.use( elk );
 
 // cytoscape.use( klay );
 
-cytoscape.use( cxtmenu ); // register extension
+cytoscape.use(cxtmenu); // register extension
+
+
+const drawerWidth = 200;
 
 export default function Graph(props) {
 
 
-  function redoLayout(ele)
-  {
+  function redoLayout(ele) {
     var core = ele.cy();
     var layout_subgraph = core.elements().not(':hidden').layout(layout);
 
@@ -58,34 +81,28 @@ export default function Graph(props) {
         eles: ele.cy().elements(':visible'),
       }
     }, {
-    duration: 10
+      duration: 10
     });
   }
 
-  function ShowHideNodeChildren(ele)
-  {
-    try
-    {
-      if (ele.outgoers()[0].style("display") == "none"){
+  function ShowHideNodeChildren(ele) {
+    try {
+      if (ele.outgoers()[0].style("display") == "none") {
         //show the nodes and edges
         ele.outgoers().style("display", "element");
       } else {
         //hide the children nodes and edges recursively
         ele.outgoers().edges().style("display", "none");
         // ele.successors().style("display", "none");
-        for (const target_i of ele.outgoers().targets())
-        {
+        for (const target_i of ele.outgoers().targets()) {
           let anyVisible = false;
-          for (const edge_i of target_i.incomers().edges())
-          {
-            if (edge_i.style("display") != "none")
-            {
+          for (const edge_i of target_i.incomers().edges()) {
+            if (edge_i.style("display") != "none") {
               console.log(edge_i.style("display"));
               anyVisible = true;
             }
           }
-          if (!anyVisible)
-          {
+          if (!anyVisible) {
             target_i.style("display", "none")
           }
         }
@@ -96,8 +113,7 @@ export default function Graph(props) {
     }
   }
 
-  function ExpandNeighborhoodOneHop(ele)
-  {
+  function ExpandNeighborhoodOneHop(ele) {
     var core = ele.cy();
     var edges = core.elements(':visible').connectedEdges();
     edges.style("display", "element");
@@ -115,9 +131,9 @@ export default function Graph(props) {
   const [height, setHeight] = useState("600px");
   const [graphData, setGraphData] = useState({
     nodes: [
-      { data: { id: "1", label: "IP 1", type: "ip", url: "https://www.worldanvil.com/dashboard/"} },
+      { data: { id: "1", label: "IP 1", type: "ip", url: "https://www.worldanvil.com/dashboard/" } },
       { data: { id: "2", label: "Device 1", type: "device" } },
-      { data: { id: "3", label: "IP 2", type: "ip", url: "http://192.168.1.37:3000/iframetest"} },
+      { data: { id: "3", label: "IP 2", type: "ip", url: "http://192.168.1.37:3000/iframetest" } },
       { data: { id: "4", label: "Device 2", type: "device" } },
       { data: { id: "5", label: "Device 3", type: "device" } },
       { data: { id: "6", label: "IP 3", type: "ip" } },
@@ -191,7 +207,7 @@ export default function Graph(props) {
 
   // const layout = {
   //   name: 'circle',
-  
+
   //   fit: true, // whether to fit the viewport to the graph
   //   padding: 30, // the padding on fit
   //   boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
@@ -210,12 +226,12 @@ export default function Graph(props) {
   //   ready: undefined, // callback on layoutready
   //   stop: undefined, // callback on layoutstop
   //   transform: function (node, position ){ return position; } // transform a given node position. Useful for changing flow direction in discrete layouts 
-  
+
   // };
 
   // const layout = {
   //   name: 'concentric',
-  
+
   //   fit: true, // whether to fit the viewport to the graph
   //   padding: 30, // the padding on fit
   //   startAngle: 3 / 2 * Math.PI, // where nodes start in radians
@@ -340,28 +356,28 @@ export default function Graph(props) {
     rankDir: undefined, // 'TB' for top to bottom flow, 'LR' for left to right,
     align: undefined,  // alignment for rank nodes. Can be 'UL', 'UR', 'DL', or 'DR', where U = up, D = down, L = left, and R = right
     acyclicer: undefined, // If set to 'greedy', uses a greedy heuristic for finding a feedback arc set for a graph.
-                          // A feedback arc set is a set of edges that can be removed to make a graph acyclic.
+    // A feedback arc set is a set of edges that can be removed to make a graph acyclic.
     ranker: undefined, // Type of algorithm to assign a rank to each node in the input graph. Possible values: 'network-simplex', 'tight-tree' or 'longest-path'
-    minLen: function( edge ){ return 1; }, // number of ranks to keep between the source and target of the edge
-    edgeWeight: function( edge ){ return 1; }, // higher weight edges are generally made shorter and straighter than lower weight edges
-  
+    minLen: function (edge) { return 1; }, // number of ranks to keep between the source and target of the edge
+    edgeWeight: function (edge) { return 1; }, // higher weight edges are generally made shorter and straighter than lower weight edges
+
     // general layout options
     fit: true, // whether to fit to viewport
     padding: 30, // fit padding
     spacingFactor: undefined, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
     nodeDimensionsIncludeLabels: true, // whether labels should be included in determining the space used by a node
     animate: false, // whether to transition the node positions
-    animateFilter: function( node, i ){ return true; }, // whether to animate specific nodes when animation is on; non-animated nodes immediately go to their final positions
+    animateFilter: function (node, i) { return true; }, // whether to animate specific nodes when animation is on; non-animated nodes immediately go to their final positions
     animationDuration: 10, // duration of animation in ms if enabled
     animationEasing: undefined, // easing of animation if enabled
     boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
-    transform: function( node, pos ){ return pos; }, // a function that applies a transform to the final node position
-    ready: function(){}, // on layoutready
+    transform: function (node, pos) { return pos; }, // a function that applies a transform to the final node position
+    ready: function () { }, // on layoutready
     sort: undefined, // a sorting function to order the nodes and edges; e.g. function(a, b){ return a.data('weight') - b.data('weight') }
-                     // because cytoscape dagre creates a directed graph, and directed graphs use the node order as a tie breaker when
-                     // defining the topology of a graph, this sort function can help ensure the correct order of the nodes/edges.
-                     // this feature is most useful when adding and removing the same nodes and edges multiple times in a graph.
-    stop: function(){} // on layoutstop
+    // because cytoscape dagre creates a directed graph, and directed graphs use the node order as a tie breaker when
+    // defining the topology of a graph, this sort function can help ensure the correct order of the nodes/edges.
+    // this feature is most useful when adding and removing the same nodes and edges multiple times in a graph.
+    stop: function () { } // on layoutstop
   };
 
   const styleSheet = [
@@ -423,15 +439,15 @@ export default function Graph(props) {
 
   // the default values of each option are outlined below:
   let defaults = {
-    menuRadius: function(ele){ return 100; }, // the outer radius (node center to the end of the menu) in pixels. It is added to the rendered size of the node. Can either be a number or function as in the example.
+    menuRadius: function (ele) { return 100; }, // the outer radius (node center to the end of the menu) in pixels. It is added to the rendered size of the node. Can either be a number or function as in the example.
     selector: 'node', // elements matching this Cytoscape.js selector will trigger cxtmenus
     commands: [ // an array of commands to list in the menu or a function that returns the array
-      
+
       { // example command
         fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
         content: 'Show/hide children', // html/text content to be displayed in the menu
         contentStyle: {}, // css key:value pairs to set the command's css in js if you want
-        select: function(ele){ // a function to execute when the command is selected
+        select: function (ele) { // a function to execute when the command is selected
           ShowHideNodeChildren(ele);
         },
         enabled: true // whether the command is selectable
@@ -440,7 +456,7 @@ export default function Graph(props) {
         fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
         content: 'Go to page', // html/text content to be displayed in the menu
         contentStyle: {}, // css key:value pairs to set the command's css in js if you want
-        select: function(ele){ // a function to execute when the command is selected
+        select: function (ele) { // a function to execute when the command is selected
           console.log(ele.data());
           window.open(ele.data().url, '_blank');
         },
@@ -450,12 +466,12 @@ export default function Graph(props) {
         fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
         content: 'Expand by one', // html/text content to be displayed in the menu
         contentStyle: {}, // css key:value pairs to set the command's css in js if you want
-        select: function(ele){ // a function to execute when the command is selected
+        select: function (ele) { // a function to execute when the command is selected
           ExpandNeighborhoodOneHop(ele);
         },
         enabled: true // whether the command is selectable
       }
-      
+
     ], // function( ele ){ return [ /*...*/ ] }, // a function that returns commands or a promise of commands
     fillColor: 'rgba(0, 0, 0, 0.75)', // the background colour of the menu
     activeFillColor: 'rgba(1, 105, 217, 0.75)', // the colour used to indicate the selected command
@@ -474,10 +490,99 @@ export default function Graph(props) {
     outsideMenuCancel: false // if set to a number, this will cancel the command if the pointer is released outside of the spotlight, padded by the number given 
   };
 
+  const { window } = props;
+
+  const [state, setState] = React.useState(false);
+
+  const toggleDrawer = () => {
+    setState(!state);
+  };
+
+  const drawer = (
+    <div>
+      <Toolbar />
+      <Divider />
+      <List>
+        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <ButtonGroup size="small" variant="contained" aria-label="outlined primary button group">
+        <Button>One</Button>
+        <Button>Two</Button>
+        <Button>Three</Button>
+      </ButtonGroup>
+      <List>
+        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  );
+
+  const container = window !== undefined ? () => window().document.body : undefined;
+
+  // const root = ReactDOM.createRoot(document.getElementById('root'));
+
   const referrer = document.referrer;
 
   return (
     <>
+      <Box>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          sx={{
+            width: { sm: `100%` },
+            ml: { sm: `${drawerWidth}px` },
+          }}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={toggleDrawer}>
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div">
+              Cytoscape example | {referrer}
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Box
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+          aria-label="mailbox folders"
+        >
+          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+          <Drawer
+            container={container}
+            variant="temporary"
+            open={state}
+            onClose={toggleDrawer}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </Box>
+      </Box>
       <div>
         {/* <h1>Cytoscape example | {referrer}</h1> */}
         <div
@@ -504,14 +609,13 @@ export default function Graph(props) {
             stylesheet={styleSheet}
             cy={cy => {
 
-              if (referrer != "") 
-              {
+              if (referrer != "") {
                 console.log(referrer);
-                let hidden_nodes = cy.nodes('[url != "'+referrer+'"]');
+                let hidden_nodes = cy.nodes('[url != "' + referrer + '"]');
                 hidden_nodes.style("display", "none");
                 hidden_nodes.connectedEdges().style("display", "none");
 
-                let referring_nodes = cy.nodes('[url = "'+referrer+'"]');
+                let referring_nodes = cy.nodes('[url = "' + referrer + '"]');
                 referring_nodes.style("border-color", "red");
                 referring_nodes.style("border-width", "4px");
                 referring_nodes.connectedEdges().style("display", "element");
@@ -533,20 +637,19 @@ export default function Graph(props) {
                     eles: cy.elements(':visible'),
                   }
                 }, {
-                duration: 10
+                  duration: 10
                 });
 
               }
-              else{
+              else {
                 var default_layout = cy.layout(layout);
                 default_layout.run();
               }
-              
+
               myCyRef = cy;
               console.log("myCyRef", myCyRef)
-              props.parentCallback(myCyRef);
 
-              cy.cxtmenu( defaults );
+              cy.cxtmenu(defaults);
 
               console.log("EVT", cy);
 
@@ -557,7 +660,7 @@ export default function Graph(props) {
                 console.log("TARGET TYPE", typeof node[0]);
               });
 
-              cy.on('tap', 'node', function(){
+              cy.on('tap', 'node', function () {
                 //if the node's children have been hidden
                 //getting the element at 1 because the element at 0 is the node itself
                 //want to check if its children are hidden
@@ -578,6 +681,6 @@ export default function Graph(props) {
         </div>
       </div>
     </>
-   
+
   );
 }
