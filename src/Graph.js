@@ -67,22 +67,22 @@ cytoscape.use(cxtmenu); // register extension
 
 const drawerWidth = 200;
 
-export default function Graph(props) {
+function Graph(props) {
 
 
   function redoLayout(ele) {
-    var core = ele.cy();
-    var layout_subgraph = core.elements().not(':hidden').layout(layout);
+    // var core = ele.cy();
+    // var layout_subgraph = core.elements().not(':hidden').layout(layout);
 
-    layout_subgraph.run();
+    // layout_subgraph.run();
 
-    core.animate({
-      fit: {
-        eles: ele.cy().elements(':visible'),
-      }
-    }, {
-      duration: 10
-    });
+    // core.animate({
+    //   fit: {
+    //     eles: ele.cy().elements(':visible'),
+    //   }
+    // }, {
+    //   duration: 10
+    // });
   }
 
   function ShowHideNodeChildren(ele) {
@@ -582,105 +582,116 @@ export default function Graph(props) {
             {drawer}
           </Drawer>
         </Box>
-      </Box>
-      <div>
-        {/* <h1>Cytoscape example | {referrer}</h1> */}
-        <div
-          style={{
-            border: "1px solid",
-            backgroundColor: "#f5f6fe"
-          }}
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, p: 3, width: { sm: `100%` } }}
         >
-          {/* <Router>
-          <Routes>
-              <Route path='/iframetest' element={<IFrameTest/>} />
-          </Routes>
-          </Router> */}
-          <CytoscapeComponent
-            elements={CytoscapeComponent.normalizeElements(graphData)}
-            // pan={{ x: 200, y: 200 }}
-            style={{ width: width, height: height }}
-            zoomingEnabled={true}
-            maxZoom={3}
-            minZoom={0.1}
-            autounselectify={false}
-            boxSelectionEnabled={true}
-            // layout={layout}
-            stylesheet={styleSheet}
-            cy={cy => {
+          <Toolbar />
+          <div>
+            {/* <h1>Cytoscape example | {referrer}</h1> */}
+            <div
+              style={{
+                border: "1px solid",
+                backgroundColor: "#f5f6fe"
+              }}
+            >
+              <CytoscapeComponent
+                elements={CytoscapeComponent.normalizeElements(graphData)}
+                // pan={{ x: 200, y: 200 }}
+                style={{ width: width, height: height }}
+                zoomingEnabled={true}
+                maxZoom={3}
+                minZoom={0.1}
+                autounselectify={false}
+                boxSelectionEnabled={true}
+                // layout={layout}
+                stylesheet={styleSheet}
+                cy={cy => {
 
-              if (referrer != "") {
-                console.log(referrer);
-                let hidden_nodes = cy.nodes('[url != "' + referrer + '"]');
-                hidden_nodes.style("display", "none");
-                hidden_nodes.connectedEdges().style("display", "none");
+                  if (referrer != "") {
+                    console.log(referrer);
+                    let hidden_nodes = cy.nodes('[url != "' + referrer + '"]');
+                    hidden_nodes.style("display", "none");
+                    hidden_nodes.connectedEdges().style("display", "none");
 
-                let referring_nodes = cy.nodes('[url = "' + referrer + '"]');
-                referring_nodes.style("border-color", "red");
-                referring_nodes.style("border-width", "4px");
-                referring_nodes.connectedEdges().style("display", "element");
-                referring_nodes.connectedEdges().targets().style("display", "element");
-                referring_nodes.connectedEdges().sources().style("display", "element");
+                    let referring_nodes = cy.nodes('[url = "' + referrer + '"]');
+                    referring_nodes.style("border-color", "red");
+                    referring_nodes.style("border-width", "4px");
+                    referring_nodes.connectedEdges().style("display", "element");
+                    referring_nodes.connectedEdges().targets().style("display", "element");
+                    referring_nodes.connectedEdges().sources().style("display", "element");
 
-                // finally, make all edges between visible nodes visible
-                var inter_edges = cy.nodes(':visible').edgesTo(':visible')
-                inter_edges.style("display", "element");
+                    // finally, make all edges between visible nodes visible
+                    var inter_edges = cy.nodes(':visible').edgesTo(':visible')
+                    inter_edges.style("display", "element");
 
-                console.log(referring_nodes.size())
+                    console.log(referring_nodes.size())
 
-                var layout_subgraph = cy.elements().not(':hidden').layout(layout);
+                    var layout_subgraph = cy.elements().not(':hidden').layout(layout);
 
-                layout_subgraph.run();
+                    layout_subgraph.run();
 
-                cy.animate({
-                  fit: {
-                    eles: cy.elements(':visible'),
+                    cy.animate({
+                      fit: {
+                        eles: cy.elements(':visible'),
+                      }
+                    }, {
+                      duration: 100
+                    });
+
                   }
-                }, {
-                  duration: 10
-                });
+                  else {
+                    var default_layout = cy.layout(layout);
+                    default_layout.run();
+                  }
 
-              }
-              else {
-                var default_layout = cy.layout(layout);
-                default_layout.run();
-              }
+                  myCyRef = cy;
+                  console.log("myCyRef", myCyRef)
 
-              myCyRef = cy;
-              console.log("myCyRef", myCyRef)
+                  cy.cxtmenu(defaults);
 
-              cy.cxtmenu(defaults);
+                  console.log("EVT", cy);
 
-              console.log("EVT", cy);
+                  cy.on("tap", "node", evt => {
+                    var node = evt.target;
+                    console.log("EVT", evt);
+                    console.log("TARGET", node.data());
+                    console.log("TARGET TYPE", typeof node[0]);
+                  });
 
-              cy.on("tap", "node", evt => {
-                var node = evt.target;
-                console.log("EVT", evt);
-                console.log("TARGET", node.data());
-                console.log("TARGET TYPE", typeof node[0]);
-              });
+                  cy.on('tap', 'node', function () {
+                    //if the node's children have been hidden
+                    //getting the element at 1 because the element at 0 is the node itself
+                    //want to check if its children are hidden
+                    /*if (this.connectedEdges().targets()[0].style("display") == "none"){
+                      //show the nodes and edges
+                      this.connectedEdges().targets().style("display", "element");
+                    } else {
+                      //hide the children nodes and edges recursively
+                      this.successors().targets().style("display", "none");
+                    }*/
 
-              cy.on('tap', 'node', function () {
-                //if the node's children have been hidden
-                //getting the element at 1 because the element at 0 is the node itself
-                //want to check if its children are hidden
-                /*if (this.connectedEdges().targets()[0].style("display") == "none"){
-                  //show the nodes and edges
-                  this.connectedEdges().targets().style("display", "element");
-                } else {
-                  //hide the children nodes and edges recursively
-                  this.successors().targets().style("display", "none");
-                }*/
+                    //ShowHideNodeChildren(this);
+                  });
 
-                //ShowHideNodeChildren(this);
-              });
-
-            }}
-            abc={console.log("myCyRef", myCyRef)}
-          />
-        </div>
-      </div>
+                }}
+                abc={console.log("myCyRef", myCyRef)}
+              />
+            </div>
+          </div>
+        </Box>
+      </Box>
     </>
 
   );
 }
+
+Graph.propTypes = {
+  /**
+   * Injected by the documentation to work in an iframe.
+   * You won't need it on your project.
+   */
+  window: PropTypes.func,
+};
+
+export default Graph;

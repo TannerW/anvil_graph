@@ -6,7 +6,7 @@ const IFrameTest = () => {
     return (
         <Iframe url="http://192.168.1.37:3000"
         width="100%"
-        height="625px"
+        height="675px"
         id=""
         className=""
         display="block"
