@@ -2,7 +2,7 @@
 import ReactDOM from 'react-dom/client';
 import '../index.css';
 import Graph from '../Graph';
-import Menu from './menu'
+import Menu from './menu.js'
 
 import * as React from 'react';
 import PropTypes from 'prop-types';

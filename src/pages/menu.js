@@ -28,18 +28,55 @@ import cytoscape from 'cytoscape';
 import cxtmenu from 'cytoscape-cxtmenu';
 import CytoscapeComponent from "react-cytoscapejs";
 
+import { cyContext } from './cyContext';
+import { useContext } from "react";
+import { styleSheet, layout } from '../GraphConfig';
+
 const drawerWidth = 200;
 
 function Menu(props) {
     const { window } = props;
-    
-    console.log("myCyRef", props.myCyRef);
-    // var cy = window.cy
-    // console.log("cy", cy);
 
+    const { items, setItems } = useContext(cyContext);
+
+    console.log("myCyRef - menu - context", items);
+
+
+    const zoom_test = () => {
+        items.zoom(2);
+    };
+
+    function redoLayout() {
+        var core = items;
+        var layout_subgraph = core.elements().not(':hidden').layout(layout);
+
+        layout_subgraph.run();
+
+        // core.animate({
+        //     fit: {
+        //         eles: core.elements(':visible'),
+        //     }
+        // }, {
+        //     duration: 100
+        // });
+    }
+
+    function ExpandNeighborhoodOneHop() {
+        var core = items;
+        var edges = core.elements(':visible').connectedEdges();
+        edges.style("display", "element");
+        edges.targets().style("display", "element");
+        edges.sources().style("display", "element");
+
+        // finally, make all edges between visible nodes visible
+        var inter_edges = core.nodes(':visible').edgesTo(':visible')
+        inter_edges.style("display", "element");
+
+        redoLayout();
+    }
 
     const [state, setState] = React.useState(false);
-    
+
     const toggleDrawer = () => {
         setState(!state);
     };
@@ -62,8 +99,8 @@ function Menu(props) {
             </List>
             <Divider />
             <ButtonGroup size="small" variant="contained" aria-label="outlined primary button group">
-                <Button>One</Button>
-                <Button>Two</Button>
+                <Button onClick={zoom_test}>One</Button>
+                <Button onClick={ExpandNeighborhoodOneHop}>Two</Button>
                 <Button>Three</Button>
             </ButtonGroup>
             <List>
