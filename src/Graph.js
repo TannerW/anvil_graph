@@ -26,6 +26,14 @@
 
 import Menu from './pages/menu.js';
 
+import SquareSharpIcon from '@mui/icons-material/SquareSharp';
+import CircleIcon from '@mui/icons-material/Circle';
+import LabelSharpIcon from '@mui/icons-material/LabelSharp';
+// import Box from '@mui/material/Box';
+// import Tooltip from '@mui/material/Tooltip';
+
+import './index.css';
+
 import React, { useState, useContext } from "react";
 import { cyContext } from './pages/cyContext';
 import cytoscape from 'cytoscape';
@@ -47,9 +55,12 @@ cytoscape.use(dagre);
 
 cytoscape.use(cxtmenu); // register extension
 
-export default function Graph(props) {
+cytoscape.use(cyCanvas);
 
-  const { items, setItems } = useContext(cyContext);
+function Graph(props) {
+
+  const { myCy, setMyCy, myTooltip, setMyTooltip } = useContext(cyContext);
+
 
 
   function redoLayout(ele) {
@@ -109,83 +120,126 @@ export default function Graph(props) {
     redoLayout(ele);
   }
 
+  // const [tooltipOpen, setTooltipOpen] = React.useState(false);
+
+  // const [tooltipPos, setTooltipPos] = React.useState({
+  //   x: 0,
+  //   y: 0,
+  // });
+
+
+  // const handleTooltipClose = () => {
+  //   setTooltipOpen(false);
+  // };
+
+  // const handleTooltipOpen = (ele) => {
+  //   try {
+  //     let pos = ele.renderedPosition();
+  //     setTooltipPos({
+  //       x: pos.x,
+  //       y: pos.y
+  //     });
+  //     setTooltipOpen(true);
+  //   }
+  //   catch {
+  //     console.log("tooltip handler init");
+  //   }
+  // };
+
+  function tooltipOpen(node) {
+    let pos = node.renderedPosition();
+    setMyTooltip({
+      open: true,
+      x: pos.x,
+      y: pos.y,
+    });
+  }
+
+  function tooltipClose() {
+    setMyTooltip({
+      open: false,
+      x: 0,
+      y: 0,
+    });
+  }
+
   const [width, setWith] = useState("100%");
   const [height, setHeight] = useState("600px");
   const [graphData, setGraphData] = useState({
-    nodes: [
-      { data: { id: "1", label: "IP 1", type: "ip", url: "https://www.worldanvil.com/dashboard/"} },
-      { data: { id: "2", label: "Device 1", type: "device" } },
-      { data: { id: "3", label: "IP 2", type: "ip", url: "http://192.168.1.37:3000/iframetest"} },
-      { data: { id: "4", label: "Device 2", type: "device" } },
-      { data: { id: "5", label: "Device 3", type: "device" } },
-      { data: { id: "6", label: "IP 3", type: "ip" } },
-      { data: { id: "7", label: "Device 5", type: "device" } },
-      { data: { id: "8", label: "Device 6", type: "device" } },
-      { data: { id: "9", label: "Device 7", type: "device" } },
-      { data: { id: "10", label: "Device 8", type: "device" } },
-      { data: { id: "11", label: "Device 9", type: "device" } },
-      { data: { id: "12", label: "IP 3", type: "ip" } },
-      { data: { id: "13", label: "Device 10", type: "device" } },
-      { data: { id: "14", label: "Device 11", type: "device" } },
-      { data: { id: "15", label: "Device 12", type: "device" } },
-      { data: { id: "16", label: "Device 13", type: "device" } },
-      { data: { id: "17", label: "Device 14", type: "device" } },
-      { data: { id: 'j', label: 'Jerry' } },
-      { data: { id: 'e', label: 'Elaine' } },
-      { data: { id: 'k', label: 'Kramer' } },
-      { data: { id: 'g', label: 'George' } }
-    ],
-    edges: [
-      {
-        data: { source: "1", target: "2", label: "Node2" }
-      },
-      {
-        data: { source: "3", target: "4", label: "Node4" }
-      },
-      {
-        data: { source: "3", target: "5", label: "Node5" }
-      },
-      {
-        data: { source: "6", target: "5", label: " 6 -> 5" }
-      },
-      {
-        data: { source: "6", target: "7", label: " 6 -> 7" }
-      },
-      {
-        data: { source: "6", target: "8", label: " 6 -> 8" }
-      },
-      {
-        data: { source: "6", target: "9", label: " 6 -> 9" }
-      },
-      {
-        data: { source: "3", target: "13", label: " 3 -> 13" }
-      },
-      {
-        data: { source: "14", target: "3", label: " 3 -> 13" }
-      },
-      {
-        data: { source: "15", target: "3", label: " 3 -> 13" }
-      },
-      {
-        data: { source: "16", target: "3", label: " 3 -> 13" }
-      },
-      {
-        data: { source: "17", target: "3", label: " 3 -> 13" }
-      },
-      {
-        data: { source: "17", target: "16", label: " 3 -> 13" }
-      },
-      { data: { source: 'j', target: 'e' } },
-      { data: { source: 'j', target: 'k' } },
-      { data: { source: 'j', target: 'g' } },
-      { data: { source: 'e', target: 'j' } },
-      { data: { source: 'e', target: 'k' } },
-      { data: { source: 'k', target: 'j' } },
-      { data: { source: 'k', target: 'e' } },
-      { data: { source: 'k', target: 'g' } },
-      { data: { source: 'g', target: 'j' } },
-      { data: { source: 'k', target: '3' } }
-    ]
+    nodes:[
+          { data: { id: "1", label: "IP 1", type: "tag", url: "https://www.worldanvil.com/dashboard/" } },
+          { data: { id: "2", label: "Device 1", type: "article" } },
+          { data: { id: "3", label: "IP 2", type: "tag", url: "http://192.168.1.37:3000/iframetest" } },
+          { data: { id: "4", label: "Device 2", type: "article" } },
+          { data: { id: "5", label: "Device 3", type: "article" } },
+          { data: { id: "6", label: "IP 3", type: "tag" } },
+          { data: { id: "7", label: "Device 5", type: "article" } },
+          { data: { id: "8", label: "Device 6", type: "article" } },
+          { data: { id: "9", label: "Device 7", type: "article" } },
+          { data: { id: "10", label: "Device 8", type: "article" } },
+          { data: { id: "11", label: "Device 9", type: "article" } },
+          { data: { id: "12", label: "IP 3", type: "tag" } },
+          { data: { id: "13", label: "Device 10", type: "article" } },
+          { data: { id: "14", label: "Device 11", type: "article" } },
+          { data: { id: "15", label: "Device 12", type: "article" } },
+          { data: { id: "16", label: "Device 13", type: "article" } },
+          { data: { id: "17", label: "Device 14", type: "article" } },
+          { data: { id: 'j', label: 'Jerry', type: "category" } },
+          { data: { id: 'e', label: 'Elaine', type: "category" } },
+          { data: { id: 'k', label: 'Kramer', type: "category" } },
+          { data: { id: 'g', label: 'George', type: "category" } }
+        ],
+        edges: [
+          {
+            data: { source: "1", target: "2", label: "Node2" }
+          },
+          {
+            data: { source: "3", target: "4", label: "Node4" }
+          },
+          {
+            data: { source: "3", target: "5", label: "Node5" }
+          },
+          {
+            data: { source: "6", target: "5", label: " 6 -> 5" }
+          },
+          {
+            data: { source: "6", target: "7", label: " 6 -> 7" }
+          },
+          {
+            data: { source: "6", target: "8", label: " 6 -> 8" }
+          },
+          {
+            data: { source: "6", target: "9", label: " 6 -> 9" }
+          },
+          {
+            data: { source: "3", target: "13", label: " 3 -> 13" }
+          },
+          {
+            data: { source: "14", target: "3", label: " 3 -> 13" }
+          },
+          {
+            data: { source: "15", target: "3", label: " 3 -> 13" }
+          },
+          {
+            data: { source: "16", target: "3", label: " 3 -> 13" }
+          },
+          {
+            data: { source: "17", target: "3", label: " 3 -> 13" }
+          },
+          {
+            data: { source: "17", target: "16", label: " 3 -> 13" }
+          },
+          { data: { source: 'j', target: 'e' } },
+          { data: { source: 'j', target: 'k' } },
+          { data: { source: 'j', target: 'g' } },
+          { data: { source: 'e', target: 'j' } },
+          { data: { source: 'e', target: 'k' } },
+          { data: { source: 'k', target: 'j' } },
+          { data: { source: 'k', target: 'e' } },
+          { data: { source: 'k', target: 'g' } },
+          { data: { source: 'g', target: 'j' } },
+          { data: { source: 'k', target: '3' } }
+        ]
   });
 
   let myCyRef;
@@ -243,6 +297,12 @@ export default function Graph(props) {
     outsideMenuCancel: false // if set to a number, this will cancel the command if the pointer is released outside of the spotlight, padded by the number given 
   };
 
+  const legend_item_style = {
+    display: "inline-block",
+    verticalAlign: "middle",
+    margin: "0"
+  };
+
   const referrer = document.referrer;
 
   return (
@@ -255,11 +315,24 @@ export default function Graph(props) {
             backgroundColor: "#f5f6fe"
           }}
         >
-          {/* <Router>
-          <Routes>
-              <Route path='/iframetest' element={<IFrameTest/>} />
-          </Routes>
-          </Router> */}
+          {/* <Tooltip
+            open={tooltipOpen}
+            onClose={handleTooltipClose}
+            onOpen={handleTooltipOpen}
+            style={{
+              position: "absolute",
+              left: `${tooltipPos.x}px`,
+              top: `${tooltipPos.y}px`,
+            }}
+            title="Add">
+            <Box
+            style={{
+              position: "absolute",
+              left: `${tooltipPos.x}px`,
+              top: `${tooltipPos.y}px`,
+            }}>
+            </Box>
+          </Tooltip> */}
           <CytoscapeComponent
             elements={CytoscapeComponent.normalizeElements(graphData)}
             // pan={{ x: 200, y: 200 }}
@@ -312,7 +385,7 @@ export default function Graph(props) {
 
               myCyRef = cy;
               console.log("myCyRef", myCyRef)
-              setItems((myCyRef) => cy);
+              setMyCy(cy);
 
               cy.cxtmenu(defaults);
 
@@ -323,6 +396,16 @@ export default function Graph(props) {
                 console.log("EVT", evt);
                 console.log("TARGET", node.data());
                 console.log("TARGET TYPE", typeof node[0]);
+              });
+
+              cy.on('select', 'node', function () {
+                tooltipOpen(this);
+                console.log("test");
+              });
+
+              cy.on('unselect', 'node', function () {
+                // tooltipClose();
+                console.log("test");
               });
 
               cy.on('tap', 'node', function () {
@@ -338,15 +421,75 @@ export default function Graph(props) {
                 }*/
 
                 //ShowHideNodeChildren(this);
+
+                // handleTooltipOpen(this);
               });
+
+              // var layer = cy.cyCanvas();
+              // var canvas = layer.getCanvas();
+              // var ctx = canvas.getContext('2d');
+
+              // cy.on("render cyCanvas.resize", function (evt) {
+              //   layer.resetTransform(ctx);
+              //   layer.clear(ctx);
+
+              //   ctx.font = "24px Helvetica";
+              //   ctx.fillStyle = "black";
+
+              //   // Draw fixed elements
+              //   ctx.fillText("This text follows the model", 0, 25);
+
+              //   // ctx.fillRect(0, 0, 100, 100); // Top left corner
+              //   layer.setTransform(ctx);
+
+              //   // Draw model elements
+              //   // cy.nodes().forEach(function(node) {
+              //   //   var pos = node.position();
+              //   //   ctx.fillRect(pos.x, pos.y, 100, 100); // At node position
+              //   // });
+              // });
 
             }}
             abc={console.log("myCyRef-after", myCyRef)}
           />
+
+          <ul style={{
+            position: "absolute",
+            top: "100px",
+            left: "10px",
+            display: "inline-block",
+            listStyleType: "none",
+            padding: "0",
+            margin: "0"
+          }}>
+            <li>
+              <SquareSharpIcon style={legend_item_style}>
+              </SquareSharpIcon>
+              <h2 style={legend_item_style}>
+                Article
+              </h2>
+            </li>
+            <li>
+              <CircleIcon style={legend_item_style}>
+              </CircleIcon>
+              <h2 style={legend_item_style}>
+                Category
+              </h2>
+            </li>
+            <li>
+              <LabelSharpIcon style={legend_item_style}>
+              </LabelSharpIcon>
+              <h2 style={legend_item_style}>
+                Tag
+              </h2>
+            </li>
+          </ul>
         </div>
       </div>
-      <Menu myCyRef={myCyRef} />
     </>
 
   );
 }
+
+
+export default Graph

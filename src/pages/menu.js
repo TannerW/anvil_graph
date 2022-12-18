@@ -37,17 +37,17 @@ const drawerWidth = 200;
 function Menu(props) {
     const { window } = props;
 
-    const { items, setItems } = useContext(cyContext);
+    const {myCy, setMyCy} = useContext(cyContext);
 
-    console.log("myCyRef - menu - context", items);
+    console.log("myCyRef - menu - context", myCy);
 
 
     const zoom_test = () => {
-        items.zoom(2);
+        myCy.zoom(2);
     };
 
     function redoLayout() {
-        var core = items;
+        var core = myCy;
         var layout_subgraph = core.elements().not(':hidden').layout(layout);
 
         layout_subgraph.run();
@@ -62,7 +62,7 @@ function Menu(props) {
     }
 
     function ExpandNeighborhoodOneHop() {
-        var core = items;
+        var core = myCy;
         var edges = core.elements(':visible').connectedEdges();
         edges.style("display", "element");
         edges.targets().style("display", "element");

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import '../index.css';
 import Graph from '../Graph';
 import Menu from './menu.js'
+import Cust_Tooltip from './tooltip';
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
@@ -34,6 +35,8 @@ function Home(props) {
     return (
         <>
         <Graph/>
+        <Cust_Tooltip /> 
+        <Menu />
         {/* <Menu myCyRef = {cy}/> */}
         </>
     );
