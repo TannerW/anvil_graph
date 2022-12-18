@@ -40,7 +40,7 @@ import cytoscape from 'cytoscape';
 import cxtmenu from 'cytoscape-cxtmenu';
 import CytoscapeComponent from "react-cytoscapejs";
 import cyCanvas from "cytoscape-canvas";
-import { styleSheet, layout } from './GraphConfig';
+import * as config from './GraphConfig';
 // import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 // import IFrameTest from './pages/iframetest';
 // import klay from 'cytoscape-klay';
@@ -59,13 +59,13 @@ cytoscape.use(cyCanvas);
 
 function Graph(props) {
 
-  const { myCy, setMyCy, myTooltip, setMyTooltip } = useContext(cyContext);
+  const { myCy, setMyCy,graph_layout, setGraph_layout } = useContext(cyContext);
 
 
 
   function redoLayout(ele) {
     var core = ele.cy();
-    var layout_subgraph = core.elements().not(':hidden').layout(layout);
+    var layout_subgraph = core.elements().not(':hidden').layout(graph_layout);
 
     layout_subgraph.run();
 
@@ -145,23 +145,6 @@ function Graph(props) {
   //     console.log("tooltip handler init");
   //   }
   // };
-
-  function tooltipOpen(node) {
-    let pos = node.renderedPosition();
-    setMyTooltip({
-      open: true,
-      x: pos.x,
-      y: pos.y,
-    });
-  }
-
-  function tooltipClose() {
-    setMyTooltip({
-      open: false,
-      x: 0,
-      y: 0,
-    });
-  }
 
   const [width, setWith] = useState("100%");
   const [height, setHeight] = useState("600px");
@@ -343,7 +326,7 @@ function Graph(props) {
             autounselectify={false}
             boxSelectionEnabled={true}
             // layout={layout}
-            stylesheet={styleSheet}
+            stylesheet={config.styleSheet}
             cy={cy => {
 
               if (referrer != "") {
@@ -365,7 +348,7 @@ function Graph(props) {
 
                 console.log(referring_nodes.size())
 
-                var layout_subgraph = cy.elements().not(':hidden').layout(layout);
+                var layout_subgraph = cy.elements().not(':hidden').layout(graph_layout);
 
                 layout_subgraph.run();
 
@@ -379,7 +362,7 @@ function Graph(props) {
 
               }
               else {
-                var default_layout = cy.layout(layout);
+                var default_layout = cy.layout(graph_layout);
                 default_layout.run();
               }
 
@@ -396,16 +379,6 @@ function Graph(props) {
                 console.log("EVT", evt);
                 console.log("TARGET", node.data());
                 console.log("TARGET TYPE", typeof node[0]);
-              });
-
-              cy.on('select', 'node', function () {
-                tooltipOpen(this);
-                console.log("test");
-              });
-
-              cy.on('unselect', 'node', function () {
-                // tooltipClose();
-                console.log("test");
               });
 
               cy.on('tap', 'node', function () {
@@ -455,7 +428,7 @@ function Graph(props) {
 
           <ul style={{
             position: "absolute",
-            top: "100px",
+            top: "75px",
             left: "10px",
             display: "inline-block",
             listStyleType: "none",
@@ -465,23 +438,23 @@ function Graph(props) {
             <li>
               <SquareSharpIcon style={legend_item_style}>
               </SquareSharpIcon>
-              <h2 style={legend_item_style}>
+              <h3 style={legend_item_style}>
                 Article
-              </h2>
+              </h3>
             </li>
             <li>
               <CircleIcon style={legend_item_style}>
               </CircleIcon>
-              <h2 style={legend_item_style}>
+              <h3 style={legend_item_style}>
                 Category
-              </h2>
+              </h3>
             </li>
             <li>
               <LabelSharpIcon style={legend_item_style}>
               </LabelSharpIcon>
-              <h2 style={legend_item_style}>
+              <h3 style={legend_item_style}>
                 Tag
-              </h2>
+              </h3>
             </li>
           </ul>
         </div>

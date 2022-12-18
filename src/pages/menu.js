@@ -23,6 +23,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import cytoscape from 'cytoscape';
 import cxtmenu from 'cytoscape-cxtmenu';
@@ -30,14 +32,16 @@ import CytoscapeComponent from "react-cytoscapejs";
 
 import { cyContext } from './cyContext';
 import { useContext } from "react";
-import { styleSheet, layout } from '../GraphConfig';
+import * as config from '../GraphConfig';
+import { NextPlanRounded } from '@mui/icons-material';
 
 const drawerWidth = 200;
+
 
 function Menu(props) {
     const { window } = props;
 
-    const {myCy, setMyCy} = useContext(cyContext);
+    const { myCy, setMyCy, graph_layout, setGraph_layout } = useContext(cyContext);
 
     console.log("myCyRef - menu - context", myCy);
 
@@ -48,7 +52,7 @@ function Menu(props) {
 
     function redoLayout() {
         var core = myCy;
-        var layout_subgraph = core.elements().not(':hidden').layout(layout);
+        var layout_subgraph = core.elements().not(':hidden').layout(graph_layout);
 
         layout_subgraph.run();
 
@@ -75,6 +79,53 @@ function Menu(props) {
         redoLayout();
     }
 
+    const [view, setView] = React.useState('list');
+
+    const view_to_layout = new Map();
+    view_to_layout.set('dagre', config.layout_dagre);
+    view_to_layout.set('breadthfirst', config.layout_bf);
+    view_to_layout.set('circle', config.layout_circle);
+    view_to_layout.set('concentric', config.layout_concentric);
+
+    const handleChange_layoutselect = (event, nextView) => {
+        setView(nextView);
+        console.log(nextView);
+        console.log(event);
+        try {
+            var layout;
+            if (nextView != null)
+            {
+                layout = view_to_layout.get(nextView);
+            }
+            else
+            {
+                layout = graph_layout;
+            }
+            setGraph_layout(layout);
+            var layout_graph = myCy.elements().not(':hidden').layout(layout);
+
+            layout_graph.run();
+            console.log("Setting graph layout to: ", layout.name)
+        }
+        catch {
+            console.log("menu init - setLayout")
+        }
+    };
+
+
+    const setLayout = (layout) => {
+        try {
+            setGraph_layout(layout);
+            var layout_graph = myCy.elements().not(':hidden').layout(layout);
+
+            layout_graph.run();
+            console.log("Setting graph layout to: ", layout.name)
+        }
+        catch {
+            console.log("menu init - setLayout")
+        }
+    }
+
     const [state, setState] = React.useState(false);
 
     const toggleDrawer = () => {
@@ -85,18 +136,26 @@ function Menu(props) {
         <div>
             <Toolbar />
             <Divider />
-            <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
+            <p>Layout</p>
+            <ToggleButtonGroup
+                orientation="vertical"
+                value={view}
+                exclusive
+                onChange={handleChange_layoutselect}
+            >
+                <ToggleButton value="dagre" aria-label="list">
+                    <ListItemText primary={"Dagre"} />
+                </ToggleButton>
+                <ToggleButton value="breadthfirst" aria-label="module">
+                    <ListItemText primary={"BreadthFirst"} />
+                </ToggleButton>
+                <ToggleButton value="circle" aria-label="quilt">
+                    <ListItemText primary={"Circle"} />
+                </ToggleButton>
+                <ToggleButton value="concentric" aria-label="quilt">
+                    <ListItemText primary={"Concentric"} />
+                </ToggleButton>
+            </ToggleButtonGroup>
             <Divider />
             <ButtonGroup size="small" variant="contained" aria-label="outlined primary button group">
                 <Button onClick={zoom_test}>One</Button>

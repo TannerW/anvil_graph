@@ -1,39 +1,86 @@
+import * as React from 'react';
+
 import { cyContext } from './cyContext';
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
+import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 
 function Cust_Tooltip(props) {
-    const { myTooltip, setMyTooltip } = useContext(cyContext);
+    const { myCy } = useContext(cyContext);
 
-    useEffect(() => { 
-        setTimeout(() => setMyTooltip(myTooltip?.current), 5) 
-    },  [myTooltip])
 
+    const [myTooltip, setMyTooltip] = useState({
+        open: false,
+        selectedTitle: ""
+    });
+
+
+    const HtmlTooltip = styled(({ className, ...props }) => (
+        <Tooltip {...props} classes={{ popper: className }} />
+    ))(({ theme }) => ({
+        [`& .${tooltipClasses.tooltip}`]: {
+            backgroundColor: '#f5f5f9',
+            color: 'rgba(0, 0, 0, 0.87)',
+            maxWidth: 220,
+            fontSize: theme.typography.pxToRem(12),
+            border: '1px solid #dadde9',
+        },
+    }));
 
     try {
 
+        function tooltipOpen(node) {
+            let pos = node.renderedPosition();
+            setMyTooltip({
+                open: true,
+                selectedTitle: node.data("label")
+            });
+
+            console.log(node.data("label"))
+        }
+
+        function tooltipClose() {
+            setMyTooltip({
+                open: false,
+                selectedTitle: ""
+            });
+        }
+
+        myCy.on('select', 'node', function () {
+            tooltipOpen(this);
+        });
+
+        myCy.on('unselect', 'node', function () {
+            tooltipClose();
+        });
+
         return (
             <>
-            <Tooltip
-                open={myTooltip.open}
-                onClose={function () { }}
-                onOpen={function () { }}
-                style={{
-                    position: "absolute",
-                    left: `${myTooltip.x}px`,
-                    top: `${myTooltip.y}px`,
-                }}
-                title="Add">
-                <Box
+                <HtmlTooltip
+                    open={myTooltip.open}
+                    onClose={function () { }}
+                    onOpen={function () { }}
                     style={{
                         position: "absolute",
-                        left: `${myTooltip.x}px`,
-                        top: `${myTooltip.y}px`,
-                    }}>
-                </Box>
-            </Tooltip>
+                        right: `10px`,
+                        top: `75px`,
+                    }}
+                    title={<React.Fragment>
+                        <Typography color="inherit">{myTooltip.selectedTitle}</Typography>
+                        <em>{"And here's"}</em> <b>{'some'}</b> <u>{'amazing content'}</u>.{' '}
+                        {"It's very engaging. Right?"}
+                      </React.Fragment>}>
+                    <Box
+                        style={{
+                            position: "absolute",
+                            right: `10px`,
+                            top: `75px`,
+                        }}>
+                    </Box>
+                </HtmlTooltip>
             </>
         )
     }
