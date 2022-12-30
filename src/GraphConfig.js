@@ -29,8 +29,8 @@ function normalize_array(array)
     return newSet;
 }
 
-function getEditIconPath() {
-    const iconString = ReactDOMServer.renderToString(<LabelSharpIcon />);
+function getEditIconPath(iconString) {
+    // const iconString = ReactDOMServer.renderToString(<LabelSharpIcon />);
     const parser = new DOMParser();
     const svgDoc = parser.parseFromString(iconString, 'image/svg+xml');
     const iconPath = String(svgDoc.querySelector('path')?.getAttribute('d'));
@@ -66,7 +66,7 @@ function getEditIconPath() {
     return path_array_num;
   };
 
-  let tag_path = getEditIconPath();
+  let tag_path = getEditIconPath(ReactDOMServer.renderToString(<LabelSharpIcon />));
   console.log("tag_css_path", tag_path);
 
 export const layout_bf = {
@@ -121,7 +121,7 @@ export const layout_concentric = {
   nodeDimensionsIncludeLabels: false, // Excludes the label when calculating node bounding boxes for the layout algorithm
   height: undefined, // height of layout area (overrides container height)
   width: undefined, // width of layout area (overrides container width)
-  spacingFactor: undefined, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
+  spacingFactor: 1.25, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
   concentric: function( node ){ // returns numeric value for each node, placing higher nodes in levels towards the centre
   return node.degree();
   },
@@ -242,7 +242,7 @@ export const layout_dagre = {
     fit: true, // whether to fit to viewport
     padding: 30, // fit padding
     spacingFactor: undefined, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
-    nodeDimensionsIncludeLabels: true, // whether labels should be included in determining the space used by a node
+    nodeDimensionsIncludeLabels: false, // whether labels should be included in determining the space used by a node
     animate: true, // whether to transition the node positions
     animateFilter: function (node, i) { return true; }, // whether to animate specific nodes when animation is on; non-animated nodes immediately go to their final positions
     animationDuration: 500, // duration of animation in ms if enabled
@@ -262,8 +262,8 @@ export const styleSheet = [
         selector: "node",
         style: {
             backgroundColor: "#4a56a6",
-            width: 30,
-            height: 30,
+            width: function( ele ){ return 30 + (ele.data('pagerank')*1000) },
+            height: function( ele ){ return 30 + (ele.data('pagerank')*1000) },
             label: "data(label)",
 
             // "width": "mapData(score, 0, 0.006769776522008331, 20, 60)",
@@ -286,8 +286,8 @@ export const styleSheet = [
             "border-color": "#AAD8FF",
             "border-opacity": "0.5",
             "background-color": "#77828C",
-            width: 50,
-            height: 50,
+            width: function( ele ){ return 50 + (ele.data('pagerank')*1000) },
+            height: function( ele ){ return 50 + (ele.data('pagerank')*1000) },
             //text props
             "text-outline-color": "#77828C",
             "text-outline-width": 8
@@ -297,6 +297,20 @@ export const styleSheet = [
         selector: "node[type='article']",
         style: {
             shape: "rectangle",
+        }
+    },
+    {
+        selector: "node[type='category']",
+        style: {
+            shape: "circle",
+        }
+    },
+    {
+        selector: "node[type='tag']",
+        style: {
+            // shape: "tag"
+            shape: 'polygon',
+            "shape-polygon-points": tag_path,
         }
     },
     {

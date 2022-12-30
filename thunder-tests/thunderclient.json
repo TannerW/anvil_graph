@@ -1,0 +1,195 @@
+[
+  {
+    "_id": "6d8e29e6-de2a-4972-a219-d4415c1ce8aa",
+    "colId": "4b0c1f2b-ec45-49bf-ad96-c4e123ed5c74",
+    "containerId": "",
+    "name": "Get World",
+    "url": "https://www.worldanvil.com/api/aragorn/world/{{WA_WORLD_ID}}",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2022-12-28T16:04:57.431Z",
+    "modified": "2022-12-28T16:04:57.431Z",
+    "headers": [
+      {
+        "name": "Content-type",
+        "value": "application/json"
+      },
+      {
+        "name": "x-auth-token",
+        "value": "{{WA_TOKEN}}"
+      },
+      {
+        "name": "x-application-key",
+        "value": "{{WE_APP_KEY}}"
+      }
+    ],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "4c4a0365-73aa-44e7-ada5-223139893062",
+    "colId": "4b0c1f2b-ec45-49bf-ad96-c4e123ed5c74",
+    "containerId": "",
+    "name": "Get Articles",
+    "url": "https://www.worldanvil.com/api/aragorn/world/{{WA_WORLD_ID}}/articles?offset=0",
+    "method": "GET",
+    "sortNum": 15000,
+    "created": "2022-12-28T16:04:57.433Z",
+    "modified": "2022-12-28T16:08:01.826Z",
+    "headers": [
+      {
+        "name": "Content-type",
+        "value": "application/json"
+      },
+      {
+        "name": "x-auth-token",
+        "value": "{{WA_TOKEN}}"
+      },
+      {
+        "name": "x-application-key",
+        "value": "{{WE_APP_KEY}}"
+      }
+    ],
+    "params": [
+      {
+        "name": "offset",
+        "value": "0",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "e6661107-2775-4ea5-b9e9-60be79fbbf3d",
+    "colId": "4b0c1f2b-ec45-49bf-ad96-c4e123ed5c74",
+    "containerId": "",
+    "name": "Get Specific Article Test 1",
+    "url": "https://www.worldanvil.com/api/aragorn/article/{{WA_TEST_ARTICLE_ID}}?load_all_properties=true",
+    "method": "GET",
+    "sortNum": 25000,
+    "created": "2022-12-28T16:04:57.434Z",
+    "modified": "2022-12-28T16:04:57.434Z",
+    "headers": [
+      {
+        "name": "Content-type",
+        "value": "application/json"
+      },
+      {
+        "name": "x-auth-token",
+        "value": "{{WA_TOKEN}}"
+      },
+      {
+        "name": "x-application-key",
+        "value": "{{WE_APP_KEY}}"
+      }
+    ],
+    "params": [
+      {
+        "name": "load_all_properties",
+        "value": "true",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "ab6e761d-44df-45b9-a68c-3cdd20901750",
+    "colId": "4b0c1f2b-ec45-49bf-ad96-c4e123ed5c74",
+    "containerId": "",
+    "name": "Get Specific Article Test 2",
+    "url": "https://www.worldanvil.com/api/aragorn/article/{{WA_TEST_ARTICLE_ID_SECOND}}?load_all_properties=true",
+    "method": "GET",
+    "sortNum": 35000,
+    "created": "2022-12-28T16:08:51.870Z",
+    "modified": "2022-12-28T16:09:43.109Z",
+    "headers": [
+      {
+        "name": "Content-type",
+        "value": "application/json"
+      },
+      {
+        "name": "x-auth-token",
+        "value": "{{WA_TOKEN}}"
+      },
+      {
+        "name": "x-application-key",
+        "value": "{{WE_APP_KEY}}"
+      }
+    ],
+    "params": [
+      {
+        "name": "load_all_properties",
+        "value": "true",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "74d16958-5f5e-49d1-b799-2d934e82e8b9",
+    "colId": "4b0c1f2b-ec45-49bf-ad96-c4e123ed5c74",
+    "containerId": "",
+    "name": "Get Categories",
+    "url": "https://www.worldanvil.com/api/aragorn/world/{{WA_WORLD_ID}}/categories?offset=50",
+    "method": "GET",
+    "sortNum": 45000,
+    "created": "2022-12-28T23:38:05.961Z",
+    "modified": "2022-12-28T23:49:47.076Z",
+    "headers": [
+      {
+        "name": "Content-type",
+        "value": "application/json"
+      },
+      {
+        "name": "x-auth-token",
+        "value": "{{WA_TOKEN}}"
+      },
+      {
+        "name": "x-application-key",
+        "value": "{{WE_APP_KEY}}"
+      }
+    ],
+    "params": [
+      {
+        "name": "offset",
+        "value": "50",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "0ff99a60-1c16-48b3-8482-3abd8b0e991f",
+    "colId": "4b0c1f2b-ec45-49bf-ad96-c4e123ed5c74",
+    "containerId": "",
+    "name": "Get Specific Category",
+    "url": "https://www.worldanvil.com/api/aragorn/category/{{WA_TEST_CATEGORY_ID}}",
+    "method": "GET",
+    "sortNum": 55000,
+    "created": "2022-12-28T23:39:53.693Z",
+    "modified": "2022-12-28T23:39:53.693Z",
+    "headers": [
+      {
+        "name": "Content-type",
+        "value": "application/json"
+      },
+      {
+        "name": "x-auth-token",
+        "value": "{{WA_TOKEN}}"
+      },
+      {
+        "name": "x-application-key",
+        "value": "{{WE_APP_KEY}}"
+      }
+    ],
+    "params": [
+      {
+        "name": "load_all_properties",
+        "value": "true",
+        "isDisabled": true,
+        "isPath": false
+      }
+    ],
+    "tests": []
+  }
+]

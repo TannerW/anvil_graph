@@ -36,7 +36,10 @@ function Cust_Tooltip(props) {
             let pos = node.renderedPosition();
             setMyTooltip({
                 open: true,
-                selectedTitle: node.data("label")
+                selectedTitle: node.data("label"),
+                selectedType: node.data("type"),
+                selectedSubtype: node.data("subtype"),
+                selectedPagerank: node.data("pagerank"),
             });
 
             console.log(node.data("label"))
@@ -45,7 +48,10 @@ function Cust_Tooltip(props) {
         function tooltipClose() {
             setMyTooltip({
                 open: false,
-                selectedTitle: ""
+                selectedTitle: "",
+                selectedType: "",
+                selectedSubtype: "",
+                selectedPagerank: "",
             });
         }
 
@@ -70,6 +76,9 @@ function Cust_Tooltip(props) {
                     }}
                     title={<React.Fragment>
                         <Typography color="inherit">{myTooltip.selectedTitle}</Typography>
+                        <Typography color="inherit"><b>{'Article Type: '}</b>{myTooltip.selectedType}</Typography>
+                        <Typography color="inherit"><b>{'Article Subtype: '}</b>{myTooltip.selectedSubtype}</Typography>
+                        <Typography color="inherit"><b>{'Pagerank: '}</b>{myTooltip.selectedPagerank}</Typography>
                         <em>{"And here's"}</em> <b>{'some'}</b> <u>{'amazing content'}</u>.{' '}
                         {"It's very engaging. Right?"}
                       </React.Fragment>}>

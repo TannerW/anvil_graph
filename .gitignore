@@ -2,3 +2,7 @@ node_modules
 setenv.sh
 test_WA_API.sh
 package-lock.json
+WA_API_Interface/.env
+WA_API_Interface/nodes.out
+WA_API_Interface/edges.out
+*/log/*

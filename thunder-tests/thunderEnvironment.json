@@ -1,0 +1,12 @@
+[
+  {
+    "_id": "663982a6-cf30-460e-8af8-9de0238c991f",
+    "name": "World Anvil",
+    "default": true,
+    "sortNum": 10000,
+    "created": "2022-12-28T16:07:16.753Z",
+    "modified": "2022-12-28T16:07:16.753Z",
+    "data": [],
+    "envFile": "../WA_API_Interface/.env"
+  }
+]
