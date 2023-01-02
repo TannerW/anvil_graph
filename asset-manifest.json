@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/anvil_graph/static/css/main.13a401ac.css",
-    "main.js": "/anvil_graph/static/js/main.f60ab736.js",
+    "main.js": "/anvil_graph/static/js/main.8e953892.js",
     "static/js/787.2b229d71.chunk.js": "/anvil_graph/static/js/787.2b229d71.chunk.js",
     "index.html": "/anvil_graph/index.html",
     "main.13a401ac.css.map": "/anvil_graph/static/css/main.13a401ac.css.map",
-    "main.f60ab736.js.map": "/anvil_graph/static/js/main.f60ab736.js.map",
+    "main.8e953892.js.map": "/anvil_graph/static/js/main.8e953892.js.map",
     "787.2b229d71.chunk.js.map": "/anvil_graph/static/js/787.2b229d71.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.13a401ac.css",
-    "static/js/main.f60ab736.js"
+    "static/js/main.8e953892.js"
   ]
 }
