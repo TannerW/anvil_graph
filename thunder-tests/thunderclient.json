@@ -97,11 +97,11 @@
     "colId": "4b0c1f2b-ec45-49bf-ad96-c4e123ed5c74",
     "containerId": "",
     "name": "Get Specific Article Test 2",
-    "url": "https://www.worldanvil.com/api/aragorn/article/{{WA_TEST_ARTICLE_ID_SECOND}}?load_all_properties=true",
+    "url": "https://www.worldanvil.com/api/aragorn/article/7193e1e0-d071-4bc2-a04c-70f0e45a7ae0?load_all_properties=true",
     "method": "GET",
     "sortNum": 35000,
     "created": "2022-12-28T16:08:51.870Z",
-    "modified": "2022-12-28T16:09:43.109Z",
+    "modified": "2022-12-30T22:53:06.314Z",
     "headers": [
       {
         "name": "Content-type",

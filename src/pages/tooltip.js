@@ -40,6 +40,7 @@ function Cust_Tooltip(props) {
                 selectedType: node.data("type"),
                 selectedSubtype: node.data("subtype"),
                 selectedPagerank: node.data("pagerank"),
+                selectedId: node.data("id")
             });
 
             console.log(node.data("label"))
@@ -52,6 +53,7 @@ function Cust_Tooltip(props) {
                 selectedType: "",
                 selectedSubtype: "",
                 selectedPagerank: "",
+                selectedId: ""
             });
         }
 
@@ -78,6 +80,7 @@ function Cust_Tooltip(props) {
                         <Typography color="inherit">{myTooltip.selectedTitle}</Typography>
                         <Typography color="inherit"><b>{'Article Type: '}</b>{myTooltip.selectedType}</Typography>
                         <Typography color="inherit"><b>{'Article Subtype: '}</b>{myTooltip.selectedSubtype}</Typography>
+                        <Typography color="inherit"><b>{'Article ID: '}</b>{myTooltip.selectedId}</Typography>
                         <Typography color="inherit"><b>{'Pagerank: '}</b>{myTooltip.selectedPagerank}</Typography>
                         <em>{"And here's"}</em> <b>{'some'}</b> <u>{'amazing content'}</u>.{' '}
                         {"It's very engaging. Right?"}

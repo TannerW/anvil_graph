@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom/client';
 import '../index.css';
 import Graph from '../Graph';
 
+import * as GraphStaticData from '../GraphStaticData';
+
 import * as React from 'react';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -37,6 +41,20 @@ import { NextPlanRounded } from '@mui/icons-material';
 
 const drawerWidth = 200;
 
+// export function MyComponent() {
+//     let hrefOrigin = React.useRef()
+
+//     React.useEffect( () => {  
+//        hrefOrigin.current= window.location.ancestorOrigins
+//   }, []);
+
+//   return (<div>
+
+//                        <div>
+//                             {hrefOrigin.current && <p>Reference: {hrefOrigin.current}</p>}
+//                        </div>
+//           </div>)
+//   }
 
 function Menu(props) {
     const { window } = props;
@@ -45,10 +63,34 @@ function Menu(props) {
 
     console.log("myCyRef - menu - context", myCy);
 
-
     const zoom_test = () => {
         myCy.zoom(2);
     };
+
+    function zoom_to(newVal) {
+        console.log(newVal);
+        if (newVal === undefined || newVal === null) {
+            let node_zoom_to = myCy.nodes()
+            myCy.animate({
+                fit: {
+                    eles: node_zoom_to,
+                }
+            }, {
+                duration: 1000
+            });
+        }
+        else {
+            let node_zoom_to = myCy.nodes('[id="' + newVal.id + '"]')
+            node_zoom_to.select()
+            myCy.animate({
+                fit: {
+                    eles: node_zoom_to,
+                }
+            }, {
+                duration: 1000
+            });
+        }
+    }
 
     function redoLayout() {
         var core = myCy;
@@ -93,12 +135,10 @@ function Menu(props) {
         console.log(event);
         try {
             var layout;
-            if (nextView != null)
-            {
+            if (nextView != null) {
                 layout = view_to_layout.get(nextView);
             }
-            else
-            {
+            else {
                 layout = graph_layout;
             }
             setGraph_layout(layout);
@@ -183,8 +223,29 @@ function Menu(props) {
 
     const referrer = document.referrer;
 
+    var referrer_test2 = ""
+
+    var autocomplete_mapping = []
+
+    try {
+        for (const node of myCy.nodes(':visible')) {
+            if (node.data('type') == 'article') {
+                autocomplete_mapping.push({ label: node.data('label'), id: node.data('id') })
+            }
+        }
+    }
+    catch {
+        for (const node of GraphStaticData.GraphStaticData_dict['nodes']) {
+            if (node['data']['type'] == 'article') {
+                autocomplete_mapping.push({ label: node['data']['label'], id: node['data']['id'] })
+            }
+        }
+    }
+
+
     return (
         <>
+            {/* <MyComponent/> */}
             <Box>
                 <CssBaseline />
                 <AppBar
@@ -202,8 +263,18 @@ function Menu(props) {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" noWrap component="div">
-                            Cytoscape example | {referrer}
+                            Cytoscape example | {referrer} | {referrer_test2}
                         </Typography>
+                        <Autocomplete
+                            disablePortal
+                            id="combo-box-demo"
+                            options={autocomplete_mapping}
+                            onChange={(event, newValue) => {
+                                zoom_to(newValue);
+                            }}
+                            sx={{ width: 300 }}
+                            renderInput={(params) => <TextField {...params} label="Article Name" />}
+                        />
                     </Toolbar>
                 </AppBar>
                 <Box

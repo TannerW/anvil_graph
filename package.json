@@ -1,6 +1,7 @@
 {
   "name": "anvil_graph",
   "version": "0.1.0",
+  "homepage": "https://tannerw.github.io/anvil_graph",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -16,6 +17,7 @@
     "cytoscape-dagre": "^2.5.0",
     "cytoscape-elk": "^2.1.0",
     "cytoscape-klay": "^3.1.4",
+    "gh-pages": "^4.0.0",
     "react": "^18.2.0",
     "react-cytoscapejs": "^2.0.0",
     "react-dom": "^18.2.0",
@@ -26,6 +28,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

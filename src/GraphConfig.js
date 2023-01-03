@@ -1,6 +1,84 @@
 import LabelSharpIcon from '@mui/icons-material/LabelSharp';
+import PersonSharpIcon from '@mui/icons-material/PersonSharp';
+import Groups2SharpIcon from '@mui/icons-material/Groups2Sharp';
+import HomeSharpIcon from '@mui/icons-material/HomeSharp';
+import InsertDriveFileSharpIcon from '@mui/icons-material/InsertDriveFileSharp';
+import HistoryEduSharpIcon from '@mui/icons-material/HistoryEduSharp';
+import RoomSharpIcon from '@mui/icons-material/RoomSharp';
+import PushPinSharpIcon from '@mui/icons-material/PushPinSharp';
+import WcSharpIcon from '@mui/icons-material/WcSharp';
+import DiamondSharpIcon from '@mui/icons-material/DiamondSharp';
+import MilitaryTechSharpIcon from '@mui/icons-material/MilitaryTechSharp';
+import WorkSharpIcon from '@mui/icons-material/WorkSharp';
+import SportsMmaSharpIcon from '@mui/icons-material/SportsMmaSharp';
+import ElectricRickshawSharpIcon from '@mui/icons-material/ElectricRickshawSharp';
+import ArticleSharpIcon from '@mui/icons-material/ArticleSharp';
+import AutoStoriesSharpIcon from '@mui/icons-material/AutoStoriesSharp';
+import BackpackSharpIcon from '@mui/icons-material/BackpackSharp';
 import ReactDOMServer from 'react-dom/server';
 import { pathDataToPolys } from 'svg-path-to-polygons';
+
+function getSVGBackground(ele, base_height_width)
+{
+    const height_width = base_height_width + (ele.data('pagerank')*2000)
+    const parser = new DOMParser();
+    var svgDocString = ""
+    if (ele.data('subtype') == 'person'){
+        svgDocString = ReactDOMServer.renderToString(<PersonSharpIcon />)
+    }
+    else if (ele.data('subtype') == 'article'){
+        svgDocString = ReactDOMServer.renderToString(<ArticleSharpIcon />)
+    }
+    else if (ele.data('subtype') == 'item'){
+        svgDocString = ReactDOMServer.renderToString(<BackpackSharpIcon />)
+    }
+    else if (ele.data('subtype') == 'myth'){
+        svgDocString = ReactDOMServer.renderToString(<AutoStoriesSharpIcon />)
+    }
+    else if (ele.data('subtype') == 'organization'){
+        svgDocString = ReactDOMServer.renderToString(<Groups2SharpIcon />)
+    }
+    else if (ele.data('subtype') == 'settlement'){
+        svgDocString = ReactDOMServer.renderToString(<HomeSharpIcon />)
+    }
+    else if (ele.data('subtype') == 'report'){
+        svgDocString = ReactDOMServer.renderToString(<InsertDriveFileSharpIcon />)
+    }
+    else if (ele.data('subtype') == 'landmark'){
+        svgDocString = ReactDOMServer.renderToString(<RoomSharpIcon />)
+    }
+    else if (ele.data('subtype') == 'location'){
+        svgDocString = ReactDOMServer.renderToString(<PushPinSharpIcon />)
+    }
+    else if (ele.data('subtype') == 'plot'){
+        svgDocString = ReactDOMServer.renderToString(<HistoryEduSharpIcon />)
+    }
+    else if (ele.data('subtype') == 'technology'){
+        svgDocString = ReactDOMServer.renderToString(<DiamondSharpIcon />)
+    }
+    else if (ele.data('subtype') == 'species'){
+        svgDocString = ReactDOMServer.renderToString(<WcSharpIcon />)
+    }
+    else if (ele.data('subtype') == 'rank'){
+        svgDocString = ReactDOMServer.renderToString(<MilitaryTechSharpIcon />)
+    }
+    else if (ele.data('subtype') == 'profession'){
+        svgDocString = ReactDOMServer.renderToString(<WorkSharpIcon />)
+    }
+    else if (ele.data('subtype') == 'militaryConflict'){
+        svgDocString = ReactDOMServer.renderToString(<SportsMmaSharpIcon />)
+    }
+    else if (ele.data('subtype') == 'vehicle'){
+        svgDocString = ReactDOMServer.renderToString(<ElectricRickshawSharpIcon />)
+    }
+    const svgDoc = parser.parseFromString(svgDocString, 'image/svg+xml');
+    const iconPath = String(svgDoc.querySelector('path')?.getAttribute('d'));
+    // console.log(iconPath)
+    const svg_pin = '<svg width="'+height_width+'" height="'+height_width+'" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="'+iconPath+'" fill="white"></path></svg>';
+    const report_svgURI = encodeURI("data:image/svg+xml;utf-8," + svg_pin);
+    // console.log(report_svgURI)
+    return report_svgURI
+}
 
 function normalize_array(array)
 {
@@ -36,7 +114,7 @@ function getEditIconPath(iconString) {
     const iconPath = String(svgDoc.querySelector('path')?.getAttribute('d'));
     console.log("tag_icon_path", iconPath);
 
-    var json_string = JSON.stringify(pathDataToPolys(iconPath, {tolerance:1, decimals:1}));
+    var json_string = JSON.stringify(pathDataToPolys(iconPath, {tolerance:100, decimals:100}));
 
     console.log("tag_poly_string", json_string);
 
@@ -69,13 +147,22 @@ function getEditIconPath(iconString) {
   let tag_path = getEditIconPath(ReactDOMServer.renderToString(<LabelSharpIcon />));
   console.log("tag_css_path", tag_path);
 
+  //   let report_path = getEditIconPath(ReactDOMServer.renderToString(<InsertDriveFileSharpIcon />));
+  const parser = new DOMParser();
+  const svgDoc = parser.parseFromString(ReactDOMServer.renderToString(<InsertDriveFileSharpIcon />), 'image/svg+xml');
+  const iconPath = String(svgDoc.querySelector('path')?.getAttribute('d'));
+  console.log(iconPath)
+  const svg_pin = '<svg width="24" height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="'+iconPath+'" fill="white"></path></svg>';
+  const report_svgURI = encodeURI("data:image/svg+xml;utf-8," + svg_pin);
+  console.log(report_svgURI)
+
 export const layout_bf = {
   name: "breadthfirst",
   fit: true,
   // circle: true,
   directed: true,
   padding: 50,
-  // spacingFactor: 1.5,
+//   spacingFactor: 1.5,
   animate: true,
   animationDuration: 500,
   avoidOverlap: true,
@@ -234,9 +321,10 @@ export const layout_dagre = {
     align: undefined,  // alignment for rank nodes. Can be 'UL', 'UR', 'DL', or 'DR', where U = up, D = down, L = left, and R = right
     acyclicer: 'greedy', // If set to 'greedy', uses a greedy heuristic for finding a feedback arc set for a graph.
     // A feedback arc set is a set of edges that can be removed to make a graph acyclic.
-    ranker: undefined, // Type of algorithm to assign a rank to each node in the input graph. Possible values: 'network-simplex', 'tight-tree' or 'longest-path'
+    ranker: 'network-simplex', // Type of algorithm to assign a rank to each node in the input graph. Possible values: 'network-simplex', 'tight-tree' or 'longest-path'
     minLen: function (edge) { return 1; }, // number of ranks to keep between the source and target of the edge
-    edgeWeight: function (edge) { return 1; }, // higher weight edges are generally made shorter and straighter than lower weight edges
+    edgeWeight: function (edge) { return edge.data().weight; }, // higher weight edges are generally made shorter and straighter than lower weight edges
+    // edgeWeight: function (edge) { return 1; }, // higher weight edges are generally made shorter and straighter than lower weight edges
 
     // general layout options
     fit: true, // whether to fit to viewport
@@ -262,8 +350,8 @@ export const styleSheet = [
         selector: "node",
         style: {
             backgroundColor: "#4a56a6",
-            width: function( ele ){ return 30 + (ele.data('pagerank')*1000) },
-            height: function( ele ){ return 30 + (ele.data('pagerank')*1000) },
+            width: function( ele ){ return 30 + (ele.data('pagerank')*2000) },
+            height: function( ele ){ return 30 + (ele.data('pagerank')*2000) },
             label: "data(label)",
 
             // "width": "mapData(score, 0, 0.006769776522008331, 20, 60)",
@@ -286,8 +374,8 @@ export const styleSheet = [
             "border-color": "#AAD8FF",
             "border-opacity": "0.5",
             "background-color": "#77828C",
-            width: function( ele ){ return 50 + (ele.data('pagerank')*1000) },
-            height: function( ele ){ return 50 + (ele.data('pagerank')*1000) },
+            width: function( ele ){ return 50 + (ele.data('pagerank')*2000) },
+            height: function( ele ){ return 50 + (ele.data('pagerank')*2000) },
             //text props
             "text-outline-color": "#77828C",
             "text-outline-width": 8
@@ -297,6 +385,9 @@ export const styleSheet = [
         selector: "node[type='article']",
         style: {
             shape: "rectangle",
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
         }
     },
     {
@@ -314,11 +405,169 @@ export const styleSheet = [
         }
     },
     {
-        selector: "node[type='tag']",
+        selector: "node[subtype='person']",
         style: {
             // shape: "tag"
-            shape: 'polygon',
-            "shape-polygon-points": tag_path,
+            // shape: 'polygon',
+            // "shape-polygon-points": person_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
+        }
+    },
+    {
+        selector: "node[subtype='organization']",
+        style: {
+            // shape: "tag"
+            // shape: 'polygon',
+            // "shape-polygon-points": group_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
+        }
+    },
+    {
+        selector: "node[subtype='settlement']",
+        style: {
+            // shape: "tag"
+            // shape: 'polygon',
+            // "shape-polygon-points": house_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
+        }
+    },
+    {
+        selector: "node[subtype='report']",
+        style: {
+            // shape: "tag"
+            // shape: 'polygon',
+            // "shape-polygon-points": report_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
+        }
+    },
+    {
+        selector: "node[subtype='plot']",
+        style: {
+            // shape: "tag"
+            // shape: 'polygon',
+            // "shape-polygon-points": plot_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
+        }
+    },
+    {
+        selector: "node[subtype='item']",
+        style: {
+            // shape: "tag"
+            // shape: 'polygon',
+            // "shape-polygon-points": plot_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
+        }
+    },
+    {
+        selector: "node[subtype='landmark']",
+        style: {
+            // shape: "tag"
+            // shape: 'polygon',
+            // "shape-polygon-points": landmark_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
+        }
+    },
+    {
+        selector: "node[subtype='location']",
+        style: {
+            // shape: "tag"
+            // shape: 'polygon',
+            // "shape-polygon-points": location_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
+        }
+    },
+    {
+        selector: "node[subtype='species']",
+        style: {
+            // shape: "tag"
+            // shape: 'polygon',
+            // "shape-polygon-points": species_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
+        }
+    },
+
+    {
+        selector: "node[subtype='myth']",
+        style: {
+            // shape: "tag"
+            // shape: 'polygon',
+            // "shape-polygon-points": species_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
+        }
+    },
+    {
+        selector: "node[subtype='technology']",
+        style: {
+            // shape: "tag"
+            // shape: 'polygon',
+            // "shape-polygon-points": technology_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
+        }
+    },
+    {
+        selector: "node[subtype='rank']",
+        style: {
+            // shape: "tag"
+            // shape: 'polygon',
+            // "shape-polygon-points": rank_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
+        }
+    },
+    {
+        selector: "node[subtype='militaryConflict']",
+        style: {
+            // shape: "tag"
+            // shape: 'polygon',
+            // "shape-polygon-points": rank_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
+        }
+    },
+    {
+        selector: "node[subtype='profession']",
+        style: {
+            // shape: "tag"
+            // shape: 'polygon',
+            // "shape-polygon-points": rank_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
+        }
+    },
+    {
+        selector: "node[subtype='vehicle']",
+        style: {
+            // shape: "tag"
+            // shape: 'polygon',
+            // "shape-polygon-points": rank_path,
+            "background-image": function(ele){
+                return getSVGBackground(ele, 25)
+            }
         }
     },
     {
@@ -329,6 +578,16 @@ export const styleSheet = [
             "line-color": "#AAD8FF",
             "target-arrow-color": "#6774cb",
             "target-arrow-shape": "triangle",
+            "curve-style": "bezier"
+        }
+    },
+    {
+        selector: "edge[type='tag']",
+        style: {
+            width: 3,
+            // "line-color": "#6774cb",
+            "line-color": "#AAD8FF",
+            "target-arrow-shape": "none",
             "curve-style": "bezier"
         }
     }
